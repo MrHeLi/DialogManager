@@ -40,11 +40,14 @@ public class DialogManager {
      *
      * @param toggleSize
      */
-    private void setToggleSize(int toggleSize) {
+    public void setToggleSize(int toggleSize) {
         mToggleSize = toggleSize;
     }
 
-    private void minusToggleSize() {
+    /**
+     *  触发大小减一
+     */
+    public void minusToggleSize() {
         mToggleSize--;
         mToggleSize = mToggleSize < 0 ? 0 : mToggleSize;
     }

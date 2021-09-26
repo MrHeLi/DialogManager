@@ -2,6 +2,8 @@ package homer.dialogmanager;
 
 import android.content.Context;
 
+import androidx.annotation.CallSuper;
+
 /**
  * 对话框管理期调用接口，需要配合DialogAbc和DialogManager使用
  *
@@ -30,8 +32,18 @@ public interface Dialog {
      */
     boolean getShowState();
 
+    /**
+     * 显示弹窗， 具体子类应该调用自己的显示方法，并且调用super函数
+     *
+     * @param context
+     */
+    @CallSuper
     void show(Context context);
 
+    /**
+     * 取消弹窗，具体子类应该调用自己的dismiss方法取消显示，并调用对应的super函数
+     */
+    @CallSuper
     void dismiss();
 
     void setOnDismissListener(DialogManager.OnDismissListener listener);
