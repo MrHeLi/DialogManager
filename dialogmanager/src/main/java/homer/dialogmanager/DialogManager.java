@@ -22,6 +22,8 @@ public class DialogManager {
     /* 弹出模式：单个弹出，一个弹完之后不立马弹出下一个 */
     public static final int CONTINUE_STATE_SINGLE = 1;
 
+    private boolean isDebug = false;
+
     private List<Dialog> mDialogs;
     // 弹窗弹出的必要条件：mDialogs.size必须达到该大小才能弹出。默认值为0
     private int mToggleSize = 0;
@@ -33,6 +35,14 @@ public class DialogManager {
     }
 
     private DialogManager() {
+    }
+
+    public boolean isDebug() {
+        return isDebug;
+    }
+
+    public void setDebug(boolean debug) {
+        isDebug = debug;
     }
 
     /**
@@ -52,7 +62,12 @@ public class DialogManager {
         mToggleSize = mToggleSize < 0 ? 0 : mToggleSize;
     }
 
-    private void setPopState(int state) {
+    /**
+     * 设置弹出模式：{@link CONTINUE_STATE_SEQUENCE}:表示上一个弹窗退出后是继续退出下一个弹窗
+     * {@link CONTINUE_STATE_SINGLE}:表示上一个弹窗退出后，不会连续弹出下一个，除非再次触发
+     * @param state
+     */
+    public void setPopState(int state) {
         mContinueState = state;
     }
 
@@ -70,7 +85,7 @@ public class DialogManager {
             mDialogs = new ArrayList<>();
         }
         dialog.setOnDismissListener(dialog1 -> {
-            Log.i("Homer", "下一个弹窗");
+            LogUtil.i("下一个弹窗");
             mDialogs.remove(dialog1);
             minusToggleSize();
             if (mContinueState == CONTINUE_STATE_SEQUENCE) {
@@ -96,20 +111,21 @@ public class DialogManager {
 
     private void showNext(int index, Context context) {
         if (index >= mDialogs.size() || index < 0) {
-            Log.i("Homer", "弹窗显示完毕");
+            LogUtil.i("弹窗显示完毕");
             return;
         }
 
         Dialog dialog = mDialogs.get(index);
         if (dialog.getShowState()) {
-            Log.i("Homer", "有正在显示的弹窗");
+            LogUtil.w("有正在显示的弹窗");
             return;
         }
 
         if (dialog.isCanShow()) {
-            Log.i("Homer", "当前显示优先级：" + dialog.getPriority());
+            LogUtil.i("当前显示优先级：" + dialog.getPriority());
             dialog.show(context);
         } else {
+            LogUtil.w("当前显示优先级不可显示：" + dialog.getPriority());
             showNext(++index, context);
         }
     }
