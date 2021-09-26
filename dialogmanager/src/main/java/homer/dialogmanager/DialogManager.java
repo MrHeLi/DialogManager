@@ -1,7 +1,6 @@
 package homer.dialogmanager;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -103,7 +102,7 @@ public class DialogManager {
      * @param context
      */
     public void show(Context context) {
-        if (mDialogs.size() < mToggleSize) { // 如果dialog没有达到触发数量，将不弹出。
+        if (mDialogs == null || mDialogs.size() < mToggleSize) { // 如果dialog没有达到触发数量，将不弹出。
             return;
         }
         showNext(0, context);
